@@ -33,6 +33,13 @@ if (userpwLength > 128 || userpwLength < 8) {
 if (userpwUpper + userpwLower + userpwNumeric + userpwSpecial === 0) {
   window.alert("Please select at least one character type");
 }
+const randomFunc = {
+	upper: getRandomUpper,
+  lower: getRandomLower,
+	numeric: getRandomNumeric,
+	special: getRandomSpecial
+}
+
 // create Random values to be used in password creation
 function getRandomLower() {
 	return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
@@ -52,17 +59,33 @@ function getRandomSpecial() {
 }
 //source of special charaters unicode https://owasp.org/www-community/password-special-characters
 //use the unicodes for special characters to avoid syntax problems in the array
+function generatePassword (upper,lower, numeric, special, length) {
+  //parameters we pass the function
 
+//place all random values in an object
+let generatedPassword = '';
+const typesCount= upper + lower + numeric +special
+const typesArr = [{ upper }, { lower }, { numeric },{ special }].filter(item => object.value(item)[0]); 
 
+//create a loop per office hours 
+for (let i=0;i<length;i+=typesCount) {
+  typesArr.forEach(type=> {
+    const funcName = Object.keys(type)[0];
+      generatePassword += randomFunc[funcName]();
+  });
+}
+  const finalPassword = generatedPassword.slice(0,length);
+
+  return finalPassword;
+}
 // Write password to the #password input
 function writePassword() {
-  var password = generatePassword();
+  var password = generatePassword(userpwUpper, userpwLower, userpwNumeric, userpwSpecial, userpwLength);
   var passwordText = document.querySelector("#password");
 
   passwordText.value = password;
 
 }
-
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 // Call writePassword function
